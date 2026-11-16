@@ -3,21 +3,21 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-border: #e2e8f0;
+  --muted: #64748b;
+  --accent: #059669;
+}
+
+html.dark {
   --background: #09090b;
   --foreground: #f4f4f5;
   --card: #121215;
   --card-border: #27272a;
   --muted: #71717a;
   --accent: #10b981;
-}
-
-html.light {
-  --background: #f8fafc;
-  --foreground: #09090b;
-  --card: #ffffff;
-  --card-border: #e2e8f0;
-  --muted: #64748b;
-  --accent: #059669;
 }
 
 body {
@@ -41,23 +41,23 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(113, 113, 122, 0.25);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(113, 113, 122, 0.45);
+  background: rgba(148, 163, 184, 0.7);
 }
 
-/* Smooth glassmorphism */
+/* Smooth glassmorphism for light theme */
 .glass {
-  background: rgba(18, 18, 21, 0.75);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-html.light .glass {
-  background: rgba(255, 255, 255, 0.85);
+html.dark .glass {
+  background: rgba(18, 18, 21, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }

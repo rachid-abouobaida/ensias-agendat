@@ -61,7 +61,7 @@ export function WeekView({
 
   return (
     <div className="space-y-4 pb-20 sm:pb-8">
-      {/* 1. Real-time Hero Card (Only shown if current system week is selected or as upcoming course) */}
+      {/* 1. Real-time Hero Card */}
       <HeroSession hero={heroSession} onSelectSession={onSelectSession} />
 
       {/* 2. Compact Week Stepper (< S1 ... S14 >) + Aujourd'hui */}
@@ -78,8 +78,8 @@ export function WeekView({
           onClick={() => setSelectedDayFilter('TOUS')}
           className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 transition-all ${
             selectedDayFilter === 'TOUS'
-              ? 'bg-zinc-100 text-zinc-950 shadow-sm'
-              : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200'
+              ? 'bg-slate-900 text-white shadow-sm dark:bg-zinc-100 dark:text-zinc-950'
+              : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 shadow-sm'
           }`}
         >
           Tous les jours ({weekSessions.length})
@@ -87,7 +87,7 @@ export function WeekView({
 
         {DAYS_ORDER.map((day) => {
           const count = sessionsByDay[day]?.length || 0;
-          if (count === 0 && selectedDayFilter !== day) return null; // hide days with no classes unless active
+          if (count === 0 && selectedDayFilter !== day) return null;
           const isSelected = selectedDayFilter === day;
           return (
             <button
@@ -95,16 +95,16 @@ export function WeekView({
               onClick={() => setSelectedDayFilter(day)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 transition-all ${
                 isSelected
-                  ? 'bg-zinc-100 text-zinc-950 shadow-sm'
-                  : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-slate-900 text-white shadow-sm dark:bg-zinc-100 dark:text-zinc-950'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 shadow-sm'
               }`}
             >
               <span>{day}</span>
               <span
-                className={`text-[10px] px-1 rounded-full ${
+                className={`text-[10px] px-1.5 rounded-full font-bold ${
                   isSelected
-                    ? 'bg-zinc-950 text-zinc-200'
-                    : 'bg-zinc-800 text-zinc-400'
+                    ? 'bg-slate-800 text-slate-200 dark:bg-zinc-950 dark:text-zinc-200'
+                    : 'bg-slate-100 text-slate-600 dark:bg-zinc-800 dark:text-zinc-400'
                 }`}
               >
                 {count}
@@ -116,12 +116,12 @@ export function WeekView({
 
       {/* 4. Weekly Days & Sessions Grid */}
       {weekSessions.length === 0 ? (
-        <div className="p-8 text-center rounded-2xl border border-dashed border-zinc-800 bg-zinc-950/40 text-zinc-500">
-          <Calendar className="w-8 h-8 mx-auto mb-2 opacity-40" />
-          <p className="text-sm font-semibold text-zinc-400">
+        <div className="p-8 text-center rounded-2xl border border-dashed border-slate-300 bg-white/60 text-slate-500 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-500 shadow-sm">
+          <Calendar className="w-8 h-8 mx-auto mb-2 opacity-40 text-slate-400" />
+          <p className="text-sm font-semibold text-slate-700 dark:text-zinc-400">
             Aucun cours programmé en Semaine S{selectedWeekNum}
           </p>
-          <p className="text-xs text-zinc-500 mt-1">
+          <p className="text-xs text-slate-500 dark:text-zinc-500 mt-1">
             Sélectionnez une autre semaine ou ajoutez une séance de rattrapage dans l&apos;onglet Édition.
           </p>
         </div>
@@ -143,19 +143,19 @@ export function WeekView({
             return (
               <div
                 key={day}
-                className="rounded-2xl border border-zinc-800/80 bg-zinc-950/60 p-3.5 sm:p-4"
+                className="rounded-2xl border border-slate-200/90 bg-white/80 dark:border-zinc-800/80 dark:bg-zinc-950/60 p-3.5 sm:p-4 shadow-sm"
               >
                 {/* Day Header */}
-                <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/60">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100 dark:border-zinc-800/60">
                   <div className="flex items-baseline gap-2">
-                    <h3 className="text-sm font-black text-zinc-100 tracking-tight">
+                    <h3 className="text-sm font-black text-slate-900 dark:text-zinc-100 tracking-tight">
                       {day}
                     </h3>
-                    <span className="text-xs font-semibold text-zinc-400">
+                    <span className="text-xs font-bold text-slate-500 dark:text-zinc-400">
                       {getDayLabel(day)}
                     </span>
                   </div>
-                  <span className="text-[11px] font-semibold text-zinc-400">
+                  <span className="text-[11px] font-semibold text-slate-500 dark:text-zinc-400">
                     {dayList.length} séance{dayList.length > 1 ? 's' : ''}
                   </span>
                 </div>
@@ -168,8 +168,8 @@ export function WeekView({
                     return (
                       <div key={horaire} className="space-y-1.5">
                         {hasOverlap && (
-                          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold w-fit">
-                            <Layers className="w-3 h-3" />
+                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 border border-amber-200 text-amber-800 dark:bg-amber-500/10 dark:border-amber-500/20 dark:text-amber-400 text-[10px] font-bold w-fit shadow-xs">
+                            <Layers className="w-3 h-3 text-amber-600" />
                             <span>Séances simultanées ({slotSessions.length} groupes SDSI)</span>
                           </div>
                         )}

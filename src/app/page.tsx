@@ -118,7 +118,6 @@ export default function Home() {
       if (res.ok) {
         const { task } = await res.json();
         setTasks((prev) => [task, ...prev]);
-        // reload summaries to update task counts
         fetchSummaries();
       }
     } catch (err) {
@@ -127,7 +126,6 @@ export default function Home() {
   };
 
   const handleToggleTask = async (taskId: string, completed: boolean) => {
-    // Optimistic UI update
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, completed } : t))
     );
@@ -145,7 +143,6 @@ export default function Home() {
   };
 
   const handleDeleteTask = async (taskId: string) => {
-    // Optimistic UI update
     setTasks((prev) => prev.filter((t) => t.id !== taskId));
 
     try {
@@ -158,7 +155,6 @@ export default function Home() {
 
   // 4. Session Handlers
   const handleUpdateSession = async (session: Session) => {
-    // Optimistic UI update
     setSessions((prev) =>
       prev.map((s) => (s.id === session.id ? session : s))
     );
@@ -248,7 +244,7 @@ export default function Home() {
   const pendingTasksCount = tasks.filter((t) => !t.completed).length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-950 text-zinc-100 selection:bg-emerald-500/30">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 selection:bg-emerald-500/20 transition-colors">
       {/* 1. Header */}
       <Header
         currentWeekNum={currentSystemWeekNum}
@@ -267,8 +263,8 @@ export default function Home() {
       <main className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 pt-4 sm:pt-6">
         {isLoading && sessions.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
-            <Loader2 className="w-8 h-8 text-emerald-400 animate-spin" />
-            <p className="text-xs text-zinc-400 font-semibold tracking-wide">
+            <Loader2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 animate-spin" />
+            <p className="text-xs text-slate-500 dark:text-zinc-400 font-semibold tracking-wide">
               Chargement de l&apos;emploi du temps SDSI...
             </p>
           </div>
