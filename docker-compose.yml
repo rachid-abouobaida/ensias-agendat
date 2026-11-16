@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_SEMESTER_START_DATE=${NEXT_PUBLIC_SEMESTER_START_DATE:-2026-10-05}
+      - NEXT_PUBLIC_SEMESTER_START_DATE=${NEXT_PUBLIC_SEMESTER_START_DATE:-2026-11-16}
       - PORT=3000
     volumes:
       # Persistent storage for CSV and JSON database

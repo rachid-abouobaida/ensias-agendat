@@ -1,5 +1,6 @@
 export const DEFAULT_SEMESTER_START =
-  process.env.NEXT_PUBLIC_SEMESTER_START_DATE || '2026-10-05';
+  process.env.NEXT_PUBLIC_SEMESTER_START_DATE || '2026-11-16';
+
 
 export const DAYS_ORDER = [
   'Lundi',

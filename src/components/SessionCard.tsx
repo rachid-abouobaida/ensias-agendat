@@ -87,7 +87,7 @@ export function SessionCard({
             {session.moduleCode}
           </span>
           <h3 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-emerald-700 dark:text-zinc-100 dark:group-hover:text-white line-clamp-1 transition-colors">
-            {meta.shortTitle || meta.title}
+            {session.moduleTitle || meta.title}
           </h3>
         </div>
 

@@ -121,7 +121,7 @@ export function SessionDetailModal({
           </div>
 
           <h2 className="text-lg font-bold text-slate-900 dark:text-white mt-2 leading-tight">
-            {meta.title}
+            {session.moduleTitle || meta.title}
           </h2>
 
           <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-500 dark:text-zinc-400 capitalize font-medium">

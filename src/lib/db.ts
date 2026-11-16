@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import {
   AppSettings,
   ModeType,
@@ -24,6 +25,8 @@ interface DatabaseSchema {
   sessions: Session[];
   tasks: Task[];
   settings: AppSettings;
+  /** SHA-256 hash of the CSV content used to detect changes */
+  csvHash?: string;
 }
 
 /**
@@ -31,6 +34,13 @@ interface DatabaseSchema {
  */
 function cleanString(str: string): string {
   return str.replace(/^\uFEFF/, '').trim();
+}
+
+/**
+ * Compute SHA-256 hash of content for change detection
+ */
+function computeHash(content: string): string {
+  return crypto.createHash('sha256').update(content, 'utf8').digest('hex');
 }
 
 /**
@@ -51,12 +61,9 @@ function parseModuleInfo(rawModule: string): {
     groupNote = matchGroup[1].trim();
   }
 
-  // Get known standard title or derive
-  let moduleTitle = MODULE_METADATA[moduleCode]?.title;
-  if (!moduleTitle) {
-    // strip the code from rawModule
-    moduleTitle = rawModule.replace(/^M11\d\s*/i, '').replace(/\(.*?\)/, '').trim();
-  }
+  // Clean title directly from CSV string
+  const strippedTitle = rawModule.replace(/^M11\d\s*/i, '').replace(/\(.*?\)/, '').trim();
+  const moduleTitle = strippedTitle || MODULE_METADATA[moduleCode]?.title || rawModule;
 
   return { moduleCode, moduleTitle, groupNote };
 }
@@ -144,64 +151,110 @@ function writeDbFile(data: DatabaseSchema): void {
 }
 
 /**
- * Load database or initialize from CSV if not exists or empty
+ * Reconcile CSV-sourced sessions with user modifications from the DB.
+ * - CSV sessions are the canonical source of truth for schedule data
+ * - User modifications (isCancelled) are preserved by matching session IDs
+ * - Custom sessions (isCustom) added by the user are kept as-is
+ */
+function reconcileSessions(
+  csvSessions: Session[],
+  dbSessions: Session[]
+): Session[] {
+  // Build a lookup of user modifications from the DB
+  const dbModifications = new Map<string, { isCancelled: boolean }>();
+  const customSessions: Session[] = [];
+
+  for (const dbSession of dbSessions) {
+    if (dbSession.isCustom) {
+      // Custom sessions are user-created, keep them entirely
+      customSessions.push(dbSession);
+    } else if (dbSession.isCancelled) {
+      // Track cancelled status by session ID
+      dbModifications.set(dbSession.id, { isCancelled: true });
+    }
+  }
+
+  // Apply user modifications to CSV sessions
+  const reconciledCsvSessions = csvSessions.map((csvSession) => {
+    const modification = dbModifications.get(csvSession.id);
+    if (modification) {
+      return { ...csvSession, isCancelled: modification.isCancelled };
+    }
+    return csvSession;
+  });
+
+  // Append custom sessions after CSV sessions
+  return [...reconciledCsvSessions, ...customSessions];
+}
+
+/**
+ * Load database with strict CSV-first data integrity.
+ * 
+ * STRATEGY: The CSV file is always the single source of truth for schedule data.
+ * On every load:
+ * 1. Parse the CSV fresh
+ * 2. Compute its hash to detect changes
+ * 3. If the DB exists, reconcile user modifications (cancelled, custom sessions)
+ * 4. Always write back the reconciled data to keep DB in sync
+ * 
+ * This guarantees the UI always reflects the latest CSV content.
  */
 export function getDatabase(): DatabaseSchema {
+  const csvContent = readOriginalCsv();
+  const csvHash = computeHash(csvContent);
+  const csvSessions = parseScheduleCsv(csvContent);
+
+  // Try to load existing DB for user modifications and tasks
+  let existingDb: DatabaseSchema | null = null;
   if (fs.existsSync(DB_FILE)) {
     try {
       const content = fs.readFileSync(DB_FILE, 'utf8');
       const data = JSON.parse(content) as DatabaseSchema;
-      if (data && Array.isArray(data.sessions) && data.sessions.length > 0) {
-        return data;
+      if (data && Array.isArray(data.sessions)) {
+        existingDb = data;
       }
     } catch (err) {
       console.error('Error reading DB_FILE, re-seeding from CSV:', err);
     }
   }
 
-  // Seed from CSV
-  const csvContent = readOriginalCsv();
-  const sessions = parseScheduleCsv(csvContent);
+  // If DB exists and CSV hasn't changed, return existing data
+  // (sessions are already in sync since we wrote them from CSV)
+  if (existingDb && existingDb.csvHash === csvHash) {
+    return existingDb;
+  }
 
-  const initialDb: DatabaseSchema = {
-    sessions,
-    tasks: [
-      {
-        id: 'task-sample-1',
-        title: 'Installer OpenCV pour TP Multimédias',
-        moduleCode: 'M112',
-        semaine: 'S7',
-        priority: 'high',
-        completed: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: 'task-sample-2',
-        title: 'Réviser les structures de graphes',
-        moduleCode: 'M113',
-        semaine: 'S7',
-        priority: 'medium',
-        completed: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ],
-    settings: {
+  // CSV changed or DB doesn't exist: reconcile and write
+  console.log(
+    existingDb
+      ? `CSV change detected (hash mismatch). Re-syncing ${csvSessions.length} sessions from CSV source of truth.`
+      : `Initializing database from CSV with ${csvSessions.length} sessions.`
+  );
+
+  const reconciledSessions = existingDb
+    ? reconcileSessions(csvSessions, existingDb.sessions)
+    : csvSessions;
+
+  const db: DatabaseSchema = {
+    sessions: reconciledSessions,
+    tasks: existingDb?.tasks || [],
+    settings: existingDb?.settings || {
       semesterStartDate: DEFAULT_SEMESTER_START,
       theme: 'dark',
     },
+    csvHash,
   };
 
-  writeDbFile(initialDb);
-  return initialDb;
+  writeDbFile(db);
+  return db;
 }
 
 /**
- * Reset database from original CSV
+ * Reset database from original CSV (force full re-sync, discarding user session modifications)
  */
 export function resetDatabaseFromCsv(): DatabaseSchema {
   const csvContent = readOriginalCsv();
+  const csvHash = computeHash(csvContent);
   const sessions = parseScheduleCsv(csvContent);
 
   const currentDb = fs.existsSync(DB_FILE)
@@ -215,6 +268,7 @@ export function resetDatabaseFromCsv(): DatabaseSchema {
       semesterStartDate: DEFAULT_SEMESTER_START,
       theme: 'dark',
     },
+    csvHash,
   };
 
   writeDbFile(newDb);

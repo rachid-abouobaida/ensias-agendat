@@ -96,7 +96,7 @@ export function HeroSession({ hero, onSelectSession }: HeroSessionProps) {
           </div>
 
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-zinc-100 truncate tracking-tight">
-            {meta.title}
+            {session.moduleTitle || meta.title}
           </h2>
 
           <div className="flex items-center gap-2 mt-2 text-xs text-slate-600 dark:text-zinc-400">

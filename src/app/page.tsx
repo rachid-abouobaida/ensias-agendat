@@ -22,9 +22,10 @@ export default function Home() {
   const [summaries, setSummaries] = useState<ModuleSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Computed Week
-  const [currentSystemWeekNum, setCurrentSystemWeekNum] = useState<number>(7);
-  const [selectedWeekNum, setSelectedWeekNum] = useState<number>(7);
+  // Computed Week — SSR-safe default of 1, corrected on client hydration
+  const [currentSystemWeekNum, setCurrentSystemWeekNum] = useState<number>(1);
+  const [selectedWeekNum, setSelectedWeekNum] = useState<number>(1);
+  const [hasInitializedWeek, setHasInitializedWeek] = useState(false);
 
   // Hero session
   const [heroSession, setHeroSession] = useState<SessionHeroStatus | null>(null);
@@ -34,21 +35,9 @@ export default function Home() {
 
   // 1. Initial Load & Offline Cache Hydration
   const loadInitialData = useCallback(async () => {
-    // Try localStorage first for instant paint
-    if (typeof window !== 'undefined') {
-      try {
-        const cachedSessions = localStorage.getItem('sdsi_sessions');
-        const cachedTasks = localStorage.getItem('sdsi_tasks');
-        const cachedSettings = localStorage.getItem('sdsi_settings');
-
-        if (cachedSessions) setSessions(JSON.parse(cachedSessions));
-        if (cachedTasks) setTasks(JSON.parse(cachedTasks));
-        if (cachedSettings) setSettings(JSON.parse(cachedSettings));
-      } catch (err) {
-        console.warn('LocalStorage error:', err);
-      }
-    }
-
+    // STRICT DATA RELIABILITY: Always fetch from the server API first.
+    // The server re-parses the CSV source of truth on every request.
+    // localStorage is only used as a fallback when offline.
     try {
       const [schedRes, taskRes] = await Promise.all([
         fetch('/api/schedule'),
@@ -61,7 +50,7 @@ export default function Home() {
         if (schedData.settings) setSettings(schedData.settings);
         if (schedData.summaries) setSummaries(schedData.summaries);
 
-        // Cache in localStorage
+        // Cache in localStorage for offline fallback only
         localStorage.setItem('sdsi_sessions', JSON.stringify(schedData.sessions));
         if (schedData.settings) {
           localStorage.setItem('sdsi_settings', JSON.stringify(schedData.settings));
@@ -74,7 +63,21 @@ export default function Home() {
         localStorage.setItem('sdsi_tasks', JSON.stringify(taskData.tasks));
       }
     } catch (err) {
-      console.warn('Network offline or fetch failed, using local cache:', err);
+      // Offline fallback: only load from localStorage if the API is unreachable
+      console.warn('Network offline, falling back to localStorage cache:', err);
+      if (typeof window !== 'undefined') {
+        try {
+          const cachedSessions = localStorage.getItem('sdsi_sessions');
+          const cachedTasks = localStorage.getItem('sdsi_tasks');
+          const cachedSettings = localStorage.getItem('sdsi_settings');
+
+          if (cachedSessions) setSessions(JSON.parse(cachedSessions));
+          if (cachedTasks) setTasks(JSON.parse(cachedTasks));
+          if (cachedSettings) setSettings(JSON.parse(cachedSettings));
+        } catch (cacheErr) {
+          console.warn('LocalStorage fallback error:', cacheErr);
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -93,8 +96,11 @@ export default function Home() {
 
       setCurrentSystemWeekNum(weekNum);
 
-      // Default selected week to current system week on first load
-      setSelectedWeekNum((prev) => (prev ? prev : weekNum));
+      // Sync selected week to current system week on first load
+      if (!hasInitializedWeek) {
+        setSelectedWeekNum(weekNum);
+        setHasInitializedWeek(true);
+      }
 
       if (sessions.length > 0) {
         const hero = getHeroSession(sessions, now, startDate);
