@@ -1,0 +1,137 @@
+﻿Semaine;Jour;Horaire;Module;Professeur;Salle;Mode
+S1;Lundi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 4;P
+S1;Mardi;17h00 à 18h50;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A9;NEANT
+S1;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S1;Samedi;08h30 à 10h20;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S1;Samedi;10h40 à 12h30;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S2;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S2;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S2;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S2;Samedi;08h30 à 10h20;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S2;Samedi;10h40 à 12h30;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S2;Samedi;14h00 à 15h50;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S2;Samedi;16h10 à 18h00;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S3;Mardi;17h00 à 18h50;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A9;NEANT
+S3;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;D
+S3;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;D
+S3;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S3;Samedi;08h30 à 10h20;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S3;Samedi;10h40 à 12h30;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S3;Samedi;14h00 à 15h50;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S3;Samedi;16h10 à 18h00;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S4;Mardi;17h00 à 18h50;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A9;NEANT
+S4;Mardi;19h10 à 21h00;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A8;NEANT
+S4;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S4;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S4;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S4;Samedi;08h30 à 10h20;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S4;Samedi;10h40 à 12h30;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S4;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S5;Mardi;17h00 à 18h50;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A9;NEANT
+S5;Mardi;19h10 à 21h00;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A8;NEANT
+S5;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;D
+S5;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;D
+S5;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S5;Samedi;08h30 à 10h20;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S5;Samedi;10h40 à 12h30;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S5;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S5;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S6;Lundi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;Amphi 4;NEANT
+S6;Mardi;17h00 à 18h50;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A9;NEANT
+S6;Mardi;19h10 à 21h00;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A8;NEANT
+S6;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S6;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S6;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S6;Samedi;10h40 à 12h30;M113 Algorithmique avancée et structures de données;Pr. A. ETTALBI;Amphi 6;NEANT
+S6;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S6;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S7;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données (GLI&IA et SDSI);Pr. M. FAKHOURI AMR;Amphi 4;NEANT
+S7;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données (SDSI);Pr. M. FAKHOURI AMR;LC3;NEANT
+S7;Mardi;17h00 à 18h50;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A9;NEANT
+S7;Mardi;19h10 à 21h00;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A8;NEANT
+S7;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;D
+S7;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;D
+S7;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S7;Jeudi;19h10 à 21h00;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S7;Samedi;08h30 à 10h20;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A5;NEANT
+S7;Samedi;10h40 à 12h30;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A5;NEANT
+S7;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S7;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S8;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données (GLI&IA et SDSI);Pr. M. FAKHOURI AMR;Amphi 4;NEANT
+S8;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données (SDSI);Pr. M. FAKHOURI AMR;LC3;NEANT
+S8;Lundi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;LC3;NEANT
+S8;Mardi;17h00 à 18h50;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;9;NEANT
+S8;Mardi;19h10 à 21h00;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A8;NEANT
+S8;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S8;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S8;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S8;Jeudi;19h10 à 21h00;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S8;Samedi;08h30 à 10h20;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A5;NEANT
+S8;Samedi;10h40 à 12h30;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A5;NEANT
+S8;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S8;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S9;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;LC3;NEANT
+S9;Lundi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;LC3;NEANT
+S9;Mardi;17h00 à 18h50;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;9;NEANT
+S9;Mardi;19h10 à 21h00;M115 Ingénierie des Données et Systèmes Décisionnels;Pr. M. FAKHOURI AMR;A8;NEANT
+S9;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;D
+S9;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;D
+S9;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S9;Jeudi;19h10 à 21h00;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S9;Samedi;08h30 à 10h20;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S9;Samedi;10h40 à 12h30;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S9;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S9;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S10;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données (GLI&IA et SDSI);Pr. M. FAKHOURI AMR;Amphi 4;NEANT
+S10;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données (SDSI);Pr. M. FAKHOURI AMR;LC3;NEANT
+S10;Lundi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;LC3;NEANT
+S10;Mardi;17h00 à 18h50;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;A9;NEANT
+S10;Mardi;19h10 à 21h00;M115 Ingénierie des Données et Systèmes Décisionnels (SDSI);Pr. M. FAKHOURI AMR;A8;NEANT
+S10;Mardi;19h10 à 21h00;M113 Algorithmique avancée et structures de données (GLI&IA et SDSI);Pr. M. FAKHOURI AMR;A9;NEANT
+S10;Mercredi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S10;Mercredi;19h10 à 21h00;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 5;P
+S10;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S10;Jeudi;19h10 à 21h00;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S10;Samedi;08h30 à 10h20;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S10;Samedi;10h40 à 12h30;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S10;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S10;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S11;Lundi;17h00 à 18h50;M117 Compétences en culture et art marocains;Pr. I. AZZOUZI;Amphi 4;P
+S11;Lundi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;LC3;NEANT
+S11;Mardi;17h00 à 18h50;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;A9;NEANT
+S11;Mardi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;A8;NEANT
+S11;Mercredi;17h00 à 18h50;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A6;NEANT
+S11;Mercredi;19h10 à 21h00;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A6;NEANT
+S11;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S11;Jeudi;19h10 à 21h00;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S11;Samedi;08h30 à 10h20;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S11;Samedi;10h40 à 12h30;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S11;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S11;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S12;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;LC3;NEANT
+S12;Lundi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;LC3;NEANT
+S12;Mardi;17h00 à 18h50;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;A9;NEANT
+S12;Mardi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;A8;NEANT
+S12;Mercredi;17h00 à 18h50;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A6;NEANT
+S12;Mercredi;19h10 à 21h00;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A6;NEANT
+S12;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S12;Jeudi;19h10 à 21h00;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S12;Samedi;08h30 à 10h20;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S12;Samedi;10h40 à 12h30;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S12;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S12;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S13;Lundi;17h00 à 18h50;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;LC3;NEANT
+S13;Mardi;17h00 à 18h50;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;A9;NEANT
+S13;Mardi;19h10 à 21h00;M113 Algorithmique avancée et structures de données;Pr. M. FAKHOURI AMR;A8;NEANT
+S13;Mercredi;17h00 à 18h50;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A6;NEANT
+S13;Mercredi;19h10 à 21h00;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A6;NEANT
+S13;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S13;Jeudi;19h10 à 21h00;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S13;Samedi;14h00 à 15h50;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S13;Samedi;16h10 à 18h00;M114 TECHNIQUES DE L'INTELLIGENCE ARTIFICIELLE;Pr. Y. BOUTYOUR;Amphi 1;NEANT
+S14;Mercredi;17h00 à 18h50;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A6;NEANT
+S14;Mercredi;19h10 à 21h00;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A6;NEANT
+S14;Jeudi;17h00 à 18h50;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S14;Jeudi;19h10 à 21h00;M111 Statistique inférentielle & analyse et visualisation;Pr. SL. AOURAGH;A9;NEANT
+S14;Samedi;14h00 à 15h50;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
+S14;Samedi;16h10 à 18h00;M112 Bases de traitement des données multimédias;Pr. S. EL FKIHI;A5;NEANT
