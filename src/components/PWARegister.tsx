@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { WifiOff, Download } from 'lucide-react';
+import { WifiOff, Download, Database, CheckCircle2 } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -10,6 +10,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function PWARegister() {
   const [isOffline, setIsOffline] = useState(false);
+  const [justReconnected, setJustReconnected] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
 
@@ -20,7 +21,7 @@ export function PWARegister() {
         navigator.serviceWorker
           .register('/sw.js')
           .then((reg) => {
-            console.log('SW enregistré avec succès:', reg.scope);
+            console.log('SW PWA enregistré avec succès:', reg.scope);
           })
           .catch((err) => {
             console.warn('Échec enregistrement SW:', err);
@@ -29,8 +30,15 @@ export function PWARegister() {
     }
 
     // 2. Offline / Online events
-    const handleOnline = () => setIsOffline(false);
-    const handleOffline = () => setIsOffline(true);
+    const handleOnline = () => {
+      setIsOffline(false);
+      setJustReconnected(true);
+      setTimeout(() => setJustReconnected(false), 3500);
+    };
+    const handleOffline = () => {
+      setIsOffline(true);
+      setJustReconnected(false);
+    };
 
     if (typeof navigator !== 'undefined') {
       setIsOffline(!navigator.onLine);
@@ -74,11 +82,20 @@ export function PWARegister() {
 
   return (
     <>
-      {/* Offline Toast Banner */}
+      {/* Offline Toast Banner with SQLite indicator */}
       {isOffline && (
-        <div className="fixed top-2 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/90 text-amber-950 font-medium text-xs shadow-lg backdrop-blur-md animate-in fade-in slide-in-from-top-2">
+        <div className="fixed top-2 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/95 text-amber-950 font-semibold text-xs shadow-xl backdrop-blur-md border border-amber-400/40 animate-in fade-in slide-in-from-top-2">
           <WifiOff className="w-3.5 h-3.5" />
-          <span>Mode hors-ligne actif • Consultation locale</span>
+          <span>Mode déconnecté • Base SQLite locale active</span>
+          <span className="hidden sm:inline opacity-75 font-normal">(agenda_db.json)</span>
+        </div>
+      )}
+
+      {/* Reconnected notification */}
+      {justReconnected && (
+        <div className="fixed top-2 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/95 text-white font-semibold text-xs shadow-xl backdrop-blur-md border border-emerald-400/40 animate-in fade-in slide-in-from-top-2">
+          <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+          <span>Connexion rétablie • Données SQLite synchronisées</span>
         </div>
       )}
 

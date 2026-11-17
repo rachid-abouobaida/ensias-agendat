@@ -138,7 +138,7 @@ export function readOriginalCsv(): string {
 }
 
 /**
- * Atomic write to JSON file
+ * Atomic write to JSON file and mirror to public/data/agenda_db.json
  */
 function writeDbFile(data: DatabaseSchema): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -148,6 +148,16 @@ function writeDbFile(data: DatabaseSchema): void {
   const tempFile = `${DB_FILE}.tmp.${Date.now()}`;
   fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf8');
   fs.renameSync(tempFile, DB_FILE);
+
+  try {
+    const publicDataDir = path.join(process.cwd(), 'public', 'data');
+    if (!fs.existsSync(publicDataDir)) {
+      fs.mkdirSync(publicDataDir, { recursive: true });
+    }
+    fs.copyFileSync(DB_FILE, path.join(publicDataDir, 'agenda_db.json'));
+  } catch (err) {
+    console.warn('Could not mirror agenda_db.json to public/data:', err);
+  }
 }
 
 /**

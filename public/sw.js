@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sdsi-agenda-v1';
+const CACHE_NAME = 'sdsi-agenda-v2';
 const STATIC_ASSETS = [
   '/',
   '/favicon.ico',
@@ -7,6 +7,10 @@ const STATIC_ASSETS = [
   '/icons/icon-512x512.png',
   '/icons/apple-touch-icon.png',
   '/icons/icon.svg',
+  '/sql-wasm.wasm',
+  '/sql-wasm.js',
+  '/data/agenda_db.json',
+  '/data/agenda_db.sqlite',
 ];
 
 // Install event: Pre-cache static assets
@@ -14,8 +18,15 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(STATIC_ASSETS);
+      .then(async (cache) => {
+        // Cache assets resiliently without failing entire install on one optional item
+        await Promise.allSettled(
+          STATIC_ASSETS.map((asset) =>
+            cache.add(asset).catch((err) => {
+              console.warn('[SW] Pré-cache avertissement pour:', asset, err);
+            })
+          )
+        );
       })
       .then(() => self.skipWaiting())
   );
@@ -37,7 +48,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event: Network-first for API & navigation, Cache-first for static assets
+// Fetch event: Network-first for API & navigation, Cache-first for static & SQLite assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -47,7 +58,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // API Requests: Network-first, fallback to cache
+  // 1. API Requests: Network-first, fallback to cache
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(request)
@@ -65,7 +76,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // HTML Page Navigation: Network-first, fallback to cached '/'
+  // 2. HTML Page Navigation: Network-first, fallback to cached '/'
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -83,17 +94,47 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static Assets (_next/static, images, icons, fonts): Cache-first with network fallback
+  // 3. SQLite WASM and agenda_db files: Cache-first with network fallback
+  if (
+    url.pathname.endsWith('.wasm') ||
+    url.pathname.endsWith('.sqlite') ||
+    url.pathname.includes('/data/agenda_db') ||
+    url.pathname.includes('sql-wasm')
+  ) {
+    event.respondWith(
+      caches.match(request).then((cachedResponse) => {
+        if (cachedResponse) {
+          // Background update if online
+          fetch(request)
+            .then((networkResponse) => {
+              if (networkResponse.status === 200) {
+                caches.open(CACHE_NAME).then((cache) => cache.put(request, networkResponse));
+              }
+            })
+            .catch(() => {});
+          return cachedResponse;
+        }
+
+        return fetch(request).then((networkResponse) => {
+          if (networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          }
+          return networkResponse;
+        });
+      })
+    );
+    return;
+  }
+
+  // 4. Other Static Assets (_next/static, images, icons, fonts): Cache-first
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Fetch in background to update cache
         fetch(request)
           .then((networkResponse) => {
             if (networkResponse.status === 200) {
-              caches
-                .open(CACHE_NAME)
-                .then((cache) => cache.put(request, networkResponse));
+              caches.open(CACHE_NAME).then((cache) => cache.put(request, networkResponse));
             }
           })
           .catch(() => {});

@@ -1,5 +1,5 @@
-import { DAY_OFFSETS, DAYS_ORDER, DEFAULT_SEMESTER_START } from './constants';
-import { Session } from '@/types';
+import { DAY_OFFSETS, DAYS_ORDER, DEFAULT_SEMESTER_START, MODULE_METADATA, DEFAULT_MODULE_COLOR } from './constants';
+import { Session, Task, ModuleSummary } from '@/types';
 
 /**
  * Parse YYYY-MM-DD into a UTC/local safe Date
@@ -276,3 +276,48 @@ export function getHeroSession(
     startsInMinutes: -1,
   };
 }
+
+/**
+ * Compute module summaries (progress and metrics)
+ */
+export function computeModuleSummaries(
+  sessions: Session[],
+  tasks: Task[],
+  semesterStartDate: string = DEFAULT_SEMESTER_START
+): ModuleSummary[] {
+  const activeSessions = sessions.filter((s) => !s.isCancelled);
+  const now = new Date();
+  const codes = ['M111', 'M112', 'M113', 'M114', 'M115', 'M117'];
+
+  return codes.map((code) => {
+    const meta = MODULE_METADATA[code];
+    const moduleSessions = activeSessions.filter((s) => s.moduleCode === code);
+    const moduleTasks = tasks.filter((t) => t.moduleCode === code);
+
+    let completedSessions = 0;
+    moduleSessions.forEach((s) => {
+      const timeParsed = parseHoraire(s.horaire);
+      const [year, month, day] = semesterStartDate.split('-').map(Number);
+      const startD = new Date(year, month - 1, day);
+      startD.setDate(startD.getDate() + (s.weekNum - 1) * 7 + s.dayIndex);
+      startD.setHours(timeParsed.endH, timeParsed.endM, 0, 0);
+
+      if (startD.getTime() < now.getTime()) {
+        completedSessions++;
+      }
+    });
+
+    const completedTasks = moduleTasks.filter((t) => t.completed).length;
+
+    return {
+      code,
+      title: meta?.title || code,
+      color: meta?.color || DEFAULT_MODULE_COLOR,
+      totalSessions: moduleSessions.length,
+      completedSessions,
+      totalTasks: moduleTasks.length,
+      completedTasks,
+    };
+  });
+}
+

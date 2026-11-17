@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ModeType, Session } from '@/types';
 import { DAYS_ORDER, MODULE_METADATA } from '@/lib/constants';
 import {
@@ -17,7 +17,14 @@ import {
   MapPin,
   X,
   Undo2,
+  Database,
+  RefreshCw,
 } from 'lucide-react';
+import {
+  getSqliteDbStats,
+  exportSqliteBlob,
+  resetSqliteFromAgendaJson,
+} from '@/lib/sqliteClient';
 
 interface EditViewProps {
   sessions: Session[];
@@ -46,6 +53,50 @@ export function EditView({
   // Reset confirmation modal
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+
+  // SQLite Management State
+  const [sqliteStats, setSqliteStats] = useState(() => getSqliteDbStats());
+  const [isResettingSqlite, setIsResettingSqlite] = useState(false);
+  const [sqliteActionFeedback, setSqliteActionFeedback] = useState<string | null>(null);
+
+  useEffect(() => {
+    const update = () => {
+      setSqliteStats(getSqliteDbStats());
+    };
+    update();
+    const interval = setInterval(update, 1500);
+    return () => clearInterval(interval);
+  }, [sessions]);
+
+  const handleDownloadSqlite = () => {
+    const blob = exportSqliteBlob();
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `agenda_db_${new Date().toISOString().slice(0, 10)}.sqlite`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setSqliteActionFeedback('Base SQLite locale exportée (.sqlite)');
+    setTimeout(() => setSqliteActionFeedback(null), 3500);
+  };
+
+  const handleReloadSqliteFromJson = async () => {
+    try {
+      setIsResettingSqlite(true);
+      await resetSqliteFromAgendaJson();
+      setSqliteStats(getSqliteDbStats());
+      setSqliteActionFeedback('Base SQLite re-synchronisée depuis data/agenda_db.json !');
+      setTimeout(() => setSqliteActionFeedback(null), 3500);
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsResettingSqlite(false);
+    }
+  };
 
   // Add Makeup Session Form
   const [showAddModal, setShowAddModal] = useState(false);
@@ -221,6 +272,79 @@ export function EditView({
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Réinitialiser CSV</span>
             </button>
+          </div>
+
+          {/* SQLite Local Database Card (PWA Offline) */}
+          <div className="pt-3 border-t border-slate-100 dark:border-zinc-800/80 flex flex-col gap-2.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                  <Database className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-800 dark:text-zinc-100 flex items-center gap-1.5">
+                    <span>Base SQLite Locale (PWA Offline)</span>
+                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  </h4>
+                  <p className="text-[10px] text-slate-500 dark:text-zinc-400">
+                    Moteur WebAssembly + IndexedDB • Source : <code className="font-mono text-emerald-600 dark:text-emerald-400">data/agenda_db.json</code>
+                  </p>
+                </div>
+              </div>
+
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                Active
+              </span>
+            </div>
+
+            {/* SQLite Metrics */}
+            <div className="grid grid-cols-3 gap-2 py-1">
+              <div className="p-2 rounded-lg bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-center">
+                <span className="block text-[10px] text-slate-500 dark:text-zinc-400 font-medium">Séances SQLite</span>
+                <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">
+                  {sqliteStats.sessionsCount > 0 ? sqliteStats.sessionsCount : sessions.length}
+                </span>
+              </div>
+              <div className="p-2 rounded-lg bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-center">
+                <span className="block text-[10px] text-slate-500 dark:text-zinc-400 font-medium">Tâches SQLite</span>
+                <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">{sqliteStats.tasksCount}</span>
+              </div>
+              <div className="p-2 rounded-lg bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-center">
+                <span className="block text-[10px] text-slate-500 dark:text-zinc-400 font-medium">Taille locale</span>
+                <span className="text-xs font-bold text-slate-800 dark:text-zinc-200">
+                  {sqliteStats.dbSizeBytes ? `${Math.round(sqliteStats.dbSizeBytes / 1024)} Ko` : '~70 Ko'}
+                </span>
+              </div>
+            </div>
+
+            {/* SQLite Actions */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleDownloadSqlite}
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold text-emerald-800 dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 dark:border-emerald-500/20 dark:text-emerald-300 transition-all shadow-xs"
+                title="Exporter et télécharger la vraie base binaire SQLite (.sqlite)"
+              >
+                <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>Télécharger .sqlite</span>
+              </button>
+
+              <button
+                onClick={handleReloadSqliteFromJson}
+                disabled={isResettingSqlite}
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-bold text-slate-800 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 dark:text-zinc-300 transition-all shadow-xs disabled:opacity-50"
+                title="Réinitialiser la base SQLite locale depuis data/agenda_db.json"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 text-slate-600 dark:text-zinc-400 ${isResettingSqlite ? 'animate-spin' : ''}`} />
+                <span>Re-sync agenda_db.json</span>
+              </button>
+            </div>
+
+            {sqliteActionFeedback && (
+              <div className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 animate-in fade-in">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>{sqliteActionFeedback}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
