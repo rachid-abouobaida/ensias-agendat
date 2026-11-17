@@ -21,6 +21,7 @@ import {
   processOfflineSyncQueue,
   getSqliteDbStats,
 } from '@/lib/sqliteClient';
+import defaultAgendaDb from '../../data/agenda_db.json';
 import { Header } from '@/components/Header';
 import { Navigation, TabType } from '@/components/Navigation';
 import { WeekView } from '@/components/WeekView';
@@ -31,13 +32,25 @@ import { Loader2 } from 'lucide-react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>('week');
-  const [sessions, setSessions] = useState<Session[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [settings, setSettings] = useState<AppSettings>({
-    semesterStartDate: DEFAULT_SEMESTER_START,
+  const [sessions, setSessions] = useState<Session[]>(() => {
+    return (defaultAgendaDb.sessions as unknown as Session[]) || [];
   });
-  const [summaries, setSummaries] = useState<ModuleSummary[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    return (defaultAgendaDb.tasks as unknown as Task[]) || [];
+  });
+  const [settings, setSettings] = useState<AppSettings>(() => {
+    return (defaultAgendaDb.settings as unknown as AppSettings) || {
+      semesterStartDate: DEFAULT_SEMESTER_START,
+    };
+  });
+  const [summaries, setSummaries] = useState<ModuleSummary[]>(() => {
+    return computeModuleSummaries(
+      (defaultAgendaDb.sessions as unknown as Session[]) || [],
+      (defaultAgendaDb.tasks as unknown as Task[]) || [],
+      defaultAgendaDb.settings?.semesterStartDate || DEFAULT_SEMESTER_START
+    );
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const [sqliteReady, setSqliteReady] = useState(false);
 
   // Computed Week — SSR-safe default of 1, corrected on client hydration
@@ -58,42 +71,7 @@ export default function Home() {
       const isSqliteInitialized = await initSqliteClient();
       setSqliteReady(isSqliteInitialized);
 
-      // 2. Attempt online fetch from server API
-      const [schedRes, taskRes] = await Promise.all([
-        fetch('/api/schedule'),
-        fetch('/api/tasks'),
-      ]);
-
-      if (schedRes.ok && taskRes.ok) {
-        const schedData = await schedRes.json();
-        const taskData = await taskRes.json();
-
-        const currentSessions = schedData.sessions || [];
-        const currentTasks = taskData.tasks || [];
-        const currentSettings = schedData.settings || { semesterStartDate: DEFAULT_SEMESTER_START };
-
-        setSessions(currentSessions);
-        setTasks(currentTasks);
-        setSettings(currentSettings);
-        setSummaries(schedData.summaries || computeModuleSummaries(currentSessions, currentTasks, currentSettings.semesterStartDate));
-
-        // Sync with local SQLite database for offline resilience
-        await syncServerDataToSqlite(currentSessions, currentTasks, currentSettings);
-
-        // Process any queued offline modifications
-        await processOfflineSyncQueue();
-
-        // Secondary localStorage cache
-        localStorage.setItem('sdsi_sessions', JSON.stringify(currentSessions));
-        localStorage.setItem('sdsi_tasks', JSON.stringify(currentTasks));
-        localStorage.setItem('sdsi_settings', JSON.stringify(currentSettings));
-      } else {
-        throw new Error('API non joignable');
-      }
-    } catch (err) {
-      console.warn('Mode déconnecté détecté, bascule vers la base SQLite locale:', err);
-
-      // Offline fallback: Query directly from local SQLite database
+      // 2. Query from local SQLite database (instantaneous)
       const localSessions = getSqliteSessions();
       const localTasks = getSqliteTasks();
       const localSettings = getSqliteSettings();
@@ -103,27 +81,42 @@ export default function Home() {
         setTasks(localTasks);
         setSettings(localSettings);
         setSummaries(computeModuleSummaries(localSessions, localTasks, localSettings.semesterStartDate));
-      } else {
-        // Fallback to localStorage if SQLite was not yet initialized
-        if (typeof window !== 'undefined') {
-          try {
-            const cachedSessions = localStorage.getItem('sdsi_sessions');
-            const cachedTasks = localStorage.getItem('sdsi_tasks');
-            const cachedSettings = localStorage.getItem('sdsi_settings');
+      }
 
-            const loadedSessions = cachedSessions ? JSON.parse(cachedSessions) : [];
-            const loadedTasks = cachedTasks ? JSON.parse(cachedTasks) : [];
-            const loadedSettings = cachedSettings ? JSON.parse(cachedSettings) : { semesterStartDate: DEFAULT_SEMESTER_START };
+      // 3. In web environment with backend available, check for online sync
+      if (typeof window !== 'undefined' && navigator.onLine) {
+        try {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 2000);
 
-            setSessions(loadedSessions);
-            setTasks(loadedTasks);
-            setSettings(loadedSettings);
-            setSummaries(computeModuleSummaries(loadedSessions, loadedTasks, loadedSettings.semesterStartDate));
-          } catch (cacheErr) {
-            console.warn('Erreur chargement fallback:', cacheErr);
+          const [schedRes, taskRes] = await Promise.all([
+            fetch('/api/schedule', { signal: controller.signal }),
+            fetch('/api/tasks', { signal: controller.signal }),
+          ]);
+          clearTimeout(timer);
+
+          if (schedRes.ok && taskRes.ok) {
+            const schedData = await schedRes.json();
+            const taskData = await taskRes.json();
+
+            const currentSessions = schedData.sessions || [];
+            const currentTasks = taskData.tasks || [];
+            const currentSettings = schedData.settings || { semesterStartDate: DEFAULT_SEMESTER_START };
+
+            setSessions(currentSessions);
+            setTasks(currentTasks);
+            setSettings(currentSettings);
+            setSummaries(schedData.summaries || computeModuleSummaries(currentSessions, currentTasks, currentSettings.semesterStartDate));
+
+            await syncServerDataToSqlite(currentSessions, currentTasks, currentSettings);
+            await processOfflineSyncQueue();
           }
+        } catch {
+          // In standalone APK or offline: SQLite local is already active and populated
         }
       }
+    } catch (err) {
+      console.warn('Initialisation données locales:', err);
     } finally {
       setIsLoading(false);
     }

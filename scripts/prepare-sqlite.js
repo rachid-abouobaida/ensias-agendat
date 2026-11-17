@@ -25,7 +25,8 @@ async function prepareSqlite() {
 
   if (fs.existsSync(sqlWasmSrc)) {
     fs.copyFileSync(sqlWasmSrc, path.join(publicDir, 'sql-wasm.wasm'));
-    console.log('✅ Copié: public/sql-wasm.wasm');
+    fs.copyFileSync(sqlWasmSrc, path.join(publicDir, 'sql-wasm-browser.wasm'));
+    console.log('✅ Copié: public/sql-wasm.wasm & public/sql-wasm-browser.wasm');
   } else {
     console.warn('⚠️ Introuvable:', sqlWasmSrc);
   }

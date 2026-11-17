@@ -58,3 +58,4 @@ export interface ModuleSummary {
   totalTasks: number;
   completedTasks: number;
 }
+
