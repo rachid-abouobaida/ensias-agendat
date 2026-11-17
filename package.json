@@ -8,6 +8,7 @@
     "prebuild": "node scripts/prepare-sqlite.js",
     "dev": "next dev",
     "build": "next build && cp -rn public .next/standalone/ 2>/dev/null || true && cp -rn .next/static .next/standalone/.next/ 2>/dev/null || true",
+    "build:apk": "npm run prepare-sqlite && mv src/app/api src/app/_api_temp && NEXT_EXPORT=true next build; STATUS=$?; mv src/app/_api_temp src/app/api; [ $STATUS -eq 0 ] && npx cap sync android && (cd android && ./gradlew assembleDebug) && cp android/app/build/outputs/apk/debug/app-debug.apk ensias-sdsi-agenda.apk && cp android/app/build/outputs/apk/debug/app-debug.apk public/ensias-sdsi-agenda.apk",
     "start": "node .next/standalone/server.js",
     "lint": "eslint"
   },
@@ -16,22 +17,22 @@
     "@capacitor/cli": "^8.6.2",
     "@capacitor/core": "^8.6.2",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.16.0",
+    "lucide-react": "^1.73.0",
     "next": "16.4.6",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "sql.js": "^1.16.0",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
-    "@tailwindcss/turbopack": "4.3.3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@tailwindcss/turbopack": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@types/sql.js": "^1.4.11",
-    "eslint": "^9",
+    "eslint": "^10.15.0",
     "eslint-config-next": "16.4.6",
-    "tailwindcss": "4.3.3",
-    "typescript": "^5"
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2"
   }
 }

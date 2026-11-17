@@ -339,6 +339,19 @@ export function EditView({
               </button>
             </div>
 
+            {/* Android APK Download Card */}
+            <div className="pt-2 border-t border-slate-100 dark:border-zinc-800/80">
+              <a
+                href="/ensias-sdsi-agenda.apk"
+                download="ensias-sdsi-agenda.apk"
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-md shadow-emerald-500/20 transition-all hover:scale-[1.01] active:scale-[0.98]"
+              >
+                <Download className="w-4 h-4" />
+                <span>Télécharger l&apos;Application Android (.apk)</span>
+                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/20">4.5 Mo</span>
+              </a>
+            </div>
+
             {sqliteActionFeedback && (
               <div className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 animate-in fade-in">
                 <CheckCircle2 className="w-3.5 h-3.5" />
