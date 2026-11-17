@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { deleteSession } from '@/lib/db';
 
+export function generateStaticParams() {
+  return [{ id: 'default' }];
+}
+
 export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }

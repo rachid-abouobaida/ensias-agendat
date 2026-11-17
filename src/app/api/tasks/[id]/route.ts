@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { deleteTask, saveTask, getAllTasks } from '@/lib/db';
 import { Task } from '@/types';
 
+export function generateStaticParams() {
+  return [{ id: 'default' }];
+}
+
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }

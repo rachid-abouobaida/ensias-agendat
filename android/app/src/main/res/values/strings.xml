@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SDSI Agenda</string>
+    <string name="title_activity_main">SDSI Agenda</string>
+    <string name="package_name">ma.ac.ensias.sdsi</string>
+    <string name="custom_url_scheme">ma.ac.ensias.sdsi</string>
+</resources>
